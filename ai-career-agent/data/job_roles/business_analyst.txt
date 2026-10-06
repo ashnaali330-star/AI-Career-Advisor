@@ -1,0 +1,12 @@
+Business Analyst
+Job description: understand business needs and translate them into clear requirements, process improvements, and measurable outcomes.
+Responsibilities: interview stakeholders; document requirements; map processes; analyze performance; define acceptance criteria; support solution testing and adoption.
+Required technical skills: requirements analysis, process modeling, spreadsheets, basic SQL/data analysis, documentation, and presentation.
+Preferred skills: Power BI/Tableau, Jira, BPMN, Agile methods, statistics, and domain knowledge.
+Soft skills: facilitation, listening, negotiation, structured thinking, writing, and stakeholder communication.
+Education: business, information systems, economics, or equivalent domain and analysis experience.
+Common tools: Excel, SQL, Power BI, Jira, Confluence, diagramming tools, presentation software.
+Beginner topics: stakeholder interviews, process maps, spreadsheets, clear requirements.
+Intermediate topics: SQL, dashboards, user stories, acceptance criteria, Agile delivery.
+Advanced topics: business cases, process redesign, experimentation, change management, analytics strategy.
+Suggested learning topics: requirements writing, process modeling, SQL and spreadsheets, dashboards, stakeholder case study.

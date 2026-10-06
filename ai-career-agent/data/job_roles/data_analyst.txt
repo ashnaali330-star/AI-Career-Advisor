@@ -1,0 +1,12 @@
+Data Analyst
+Job description: turn business data into clear insights that support decisions.
+Responsibilities: analyze business data; clean and validate datasets; create dashboards and reports; identify trends and explain findings to stakeholders.
+Required technical skills: SQL, spreadsheets/Excel, data cleaning, descriptive statistics, data visualization, and communicating analytical results. Python is commonly required for automation and larger datasets.
+Preferred skills: pandas, NumPy, Power BI or Tableau, basic experimentation, and cloud data warehouses.
+Soft skills: structured thinking, curiosity, attention to detail, communication, and stakeholder management.
+Education: degree or equivalent experience in analytics, statistics, computer science, business, economics, or a related field; portfolio evidence is valuable.
+Common tools: SQL databases, Excel, Python, pandas, Power BI, Tableau, Jupyter, Git.
+Beginner topics: spreadsheet formulas, SQL SELECT/WHERE/JOIN/GROUP BY, chart fundamentals.
+Intermediate topics: window functions, data cleaning, dashboard design, statistics, pandas, communicating insights.
+Advanced topics: experimentation, causal reasoning, data modeling, analytics engineering, cloud warehouses.
+Suggested learning topics: SQL fundamentals, advanced spreadsheets, statistics, Power BI/Tableau, Python analysis, portfolio case studies.

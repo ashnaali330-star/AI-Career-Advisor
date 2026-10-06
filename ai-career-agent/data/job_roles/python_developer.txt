@@ -1,0 +1,12 @@
+Python Developer
+Job description: design, implement, test, and maintain Python applications and services.
+Responsibilities: write maintainable code; build APIs and integrations; automate tasks; review code; troubleshoot production issues; collaborate on software delivery.
+Required technical skills: Python, object-oriented programming, data structures, debugging, testing, Git, and SQL or data formats.
+Preferred skills: Django or FastAPI, Docker, cloud platforms, CI/CD, asynchronous programming, and Linux.
+Soft skills: problem solving, communication, collaboration, attention to detail, and adaptability.
+Education: computer science or equivalent practical software development experience.
+Common tools: Python, pytest, Git, FastAPI, Django, SQL databases, Docker, IDEs, CI systems.
+Beginner topics: Python syntax, functions, collections, files, modules, Git.
+Intermediate topics: APIs, databases, testing, packaging, typing, web frameworks.
+Advanced topics: async systems, architecture, performance, security, deployment and observability.
+Suggested learning topics: Python fundamentals, testing and Git, APIs, databases, a deployed portfolio service.

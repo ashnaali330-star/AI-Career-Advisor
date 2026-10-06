@@ -1,0 +1,5 @@
+Jordan Test
+Aspiring Data Analyst
+Technical skills: SQL, Excel, Python, Power BI, Pandas.
+Project: Built a sales dashboard with monthly revenue and regional breakdowns.
+Education: Bachelor of Business Administration.

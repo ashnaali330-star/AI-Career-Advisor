@@ -1,0 +1,12 @@
+Data Scientist
+Job description: use statistics, programming, and machine learning to answer complex questions and build predictive solutions.
+Responsibilities: frame analytical problems; explore and prepare data; design experiments; train and evaluate models; communicate uncertainty and findings; collaborate on deployment.
+Required technical skills: Python or R, SQL, probability and statistics, data wrangling, exploratory analysis, machine learning fundamentals, model evaluation, and data visualization.
+Preferred skills: scikit-learn, pandas, NumPy, deep learning, cloud platforms, causal inference, MLOps, and domain expertise.
+Soft skills: critical thinking, communication, experimentation mindset, collaboration, and ethical judgment.
+Education: quantitative degree or equivalent experience; advanced study can help in research-heavy roles.
+Common tools: Python, Jupyter, pandas, NumPy, scikit-learn, SQL, Git, cloud notebooks, visualization libraries.
+Beginner topics: Python, SQL, descriptive statistics, probability, data visualization.
+Intermediate topics: feature engineering, supervised learning, cross validation, model metrics, experimentation.
+Advanced topics: causal inference, deep learning, scalable training, deployment, monitoring, responsible AI.
+Suggested learning topics: Python and SQL, statistics, machine learning, model evaluation, portfolio projects, deployment basics.

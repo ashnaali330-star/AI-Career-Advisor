@@ -1,0 +1,11 @@
+.env
+.env.*
+!.env.example
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+vector_db/*
+!vector_db/.gitkeep
+
+*.log

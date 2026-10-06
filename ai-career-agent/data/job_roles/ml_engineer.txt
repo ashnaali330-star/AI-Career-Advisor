@@ -1,0 +1,12 @@
+Machine Learning Engineer
+Job description: build reliable software systems that train, deploy, and operate machine learning models.
+Responsibilities: prepare data pipelines; productionize models; build inference services; monitor quality and drift; optimize reliability, latency, and cost; collaborate with research and product teams.
+Required technical skills: strong Python, software engineering, data structures, APIs, testing, ML fundamentals, model evaluation, and data pipeline concepts.
+Preferred skills: PyTorch or TensorFlow, Docker, cloud platforms, Kubernetes, feature stores, CI/CD, distributed systems, and MLOps.
+Soft skills: ownership, debugging, teamwork, clear communication, and systems thinking.
+Education: computer science, engineering, statistics, or equivalent practical experience.
+Common tools: Python, scikit-learn, PyTorch, SQL, Git, Docker, FastAPI, cloud ML services, experiment tracking.
+Beginner topics: Python programming, Git, testing, linear algebra, model training.
+Intermediate topics: serving models, Docker, APIs, data validation, monitoring, CI/CD.
+Advanced topics: distributed training, model optimization, Kubernetes, feature platforms, scalable architecture.
+Suggested learning topics: Python engineering, ML foundations, API deployment, containers, cloud and MLOps projects.

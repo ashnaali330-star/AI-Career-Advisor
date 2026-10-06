@@ -1,0 +1,12 @@
+AI Engineer
+Job description: integrate modern AI models into useful, safe, and reliable software products.
+Responsibilities: build AI-powered features; connect models to data and tools; evaluate quality; implement retrieval and prompting; manage latency, cost, privacy, and safety.
+Required technical skills: Python, APIs, software engineering, LLM concepts, prompt design, evaluation, and data handling.
+Preferred skills: embeddings, vector search, RAG, agent tool use, structured output, FastAPI, Docker, cloud services, and observability.
+Soft skills: product thinking, experimentation, communication, responsible judgment, and cross-functional collaboration.
+Education: computer science or related field, or equivalent project experience.
+Common tools: Python, model APIs, LangChain or similar orchestration libraries, FAISS or managed vector stores, Git, Docker, cloud services.
+Beginner topics: Python, HTTP APIs, LLM basics, prompt construction, JSON outputs.
+Intermediate topics: embeddings, chunking, vector databases, RAG, tool calling, evaluation.
+Advanced topics: agent reliability, guardrails, multimodal systems, deployment, monitoring, cost optimization.
+Suggested learning topics: API integration, prompting, embeddings and vector search, RAG application, evaluation and deployment.

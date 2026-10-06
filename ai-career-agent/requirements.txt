@@ -1,0 +1,12 @@
+streamlit>=1.32
+python-dotenv>=1.0
+google-genai>=1.20
+faiss-cpu>=1.8
+sentence-transformers>=3.0
+pypdf>=4.2
+python-docx>=1.1
+numpy>=1.26
+faster-whisper>=1.2.0
+av>=11,<17
+kokoro-onnx>=0.6.1
+soundfile>=0.13.0
