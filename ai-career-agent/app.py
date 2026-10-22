@@ -241,7 +241,7 @@ def _render_skill_gaps(analysis, role="the selected role"):
         _render_gap_entries(rows, "No structured skill requirements were returned.", show_status=True)
     st.subheader("🎯 A few useful next steps")
     recommendations = _as_items(analysis.get("recommendations", [])) if isinstance(analysis, dict) else []
-    _render_bullets(recommendations, "No additional actions were returned.")
+    _render_bullets(_unique_advice(recommendations), "No additional actions were returned.")
 
 
 _LEVEL_RANK = {"missing": 0, "none": 0, "basic": 1, "beginner": 1, "foundational": 1,
@@ -460,7 +460,7 @@ def _render_recommendations(value):
     for index, item in enumerate(items, start=1):
         if isinstance(item, dict):
             role = _plain_text(_find_value(item, ("role", "title", "job_title", "name"), fallback=f"Recommended role {index}"))
-            explanation = _find_value(item, ("explanation", "rationale", "reason", "summary", "fit"), fallback=None)
+            explanation = _concise_advice(_find_value(item, ("explanation", "rationale", "reason", "summary", "fit"), fallback=None))
             matching = _find_value(item, ("matching_skills", "strengths"), fallback=None)
             gaps = _find_value(item, ("gaps", "skill_gaps", "development_areas"), fallback=None)
             with st.container(border=True):
@@ -468,13 +468,51 @@ def _render_recommendations(value):
                 if explanation:
                     st.markdown(_plain_text(explanation))
                 if matching:
-                    st.markdown(f"- **Relevant strengths:** {_plain_text(matching)}")
+                    st.markdown(f"- **Relevant strengths:** {_concise_advice(matching)}")
                 if gaps:
-                    st.markdown(f"- **Areas to develop:** {_plain_text(gaps)}")
+                    st.markdown(f"- **Areas to develop:** {_concise_advice(gaps)}")
         else:
-            text = _plain_text(item)
+            text = _concise_advice(item)
             if text:
                 st.markdown(f"- {text}")
+
+
+def _clean_advice_text(value):
+    """Remove repeated recommendation labels and normalize concise advice text."""
+    text = _plain_text(value)
+    text = re.sub(r"(?i)^(?:\s*recommended\s*:\s*)+", "", text)
+    text = re.sub(r"(?i)\b(?:recommended\s*:\s*){2,}", "", text)
+    text = re.sub(r"(?i)\b(\w+(?:[’'-]\w+)?)\s+\1\b", r"\1", text)
+    text = re.sub(r"^\s*[-•]\s+", "", text)
+    text = re.sub(r"\s+", " ", text).strip()
+    return text
+
+
+def _concise_advice(value, max_sentences=2):
+    """Remove duplicate sentences and keep generated advice brief."""
+    text = _clean_advice_text(value)
+    sentences, seen = [], set()
+    for sentence in re.split(r"(?<=[.!?])\s+", text):
+        sentence = sentence.strip()
+        key = re.sub(r"[^a-z0-9]+", "", re.sub(r"[\[\]]", "", sentence.casefold()))
+        if sentence and key not in seen:
+            seen.add(key)
+            sentences.append(sentence)
+        if len(sentences) >= max_sentences:
+            break
+    return " ".join(sentences)
+
+
+def _unique_advice(items):
+    """Clean an advice list and drop exact repeated items while preserving order."""
+    cleaned, seen = [], set()
+    for item in items:
+        text = _clean_advice_text(item)
+        normalized = re.sub(r"[^a-z0-9]+", "", re.sub(r"[\[\]]", "", text.casefold()))
+        if text and normalized not in seen:
+            seen.add(normalized)
+            cleaned.append(text)
+    return cleaned
 
 
 def _career_preparation(profile, target_role, gaps):
@@ -489,28 +527,28 @@ def _career_preparation(profile, target_role, gaps):
         "business analyst": ["requirements gathering", "process mapping", "SQL or spreadsheets", "KPI communication"],
     }
     company_types = {
-        "data analyst": "Consider junior or associate analyst roles in SaaS, retail/e-commerce, fintech, healthcare, consulting, and analytics teams at small or mid-sized businesses.",
-        "data scientist": "Consider graduate or junior analytics/data science teams in technology, fintech, healthcare, retail, and consulting; internships can also provide applied project experience.",
-        "ml engineer": "Consider software and product companies deploying models, AI/ML startups, and data-platform teams; include junior software roles that offer model-serving or data-pipeline work.",
-        "ai engineer": "Consider AI product teams, SaaS companies adding AI features, AI application startups, and consultancies delivering automation or LLM solutions.",
-        "python developer": "Consider SaaS companies, software consultancies, product startups, and internal automation teams hiring junior Python or backend developers.",
-        "business analyst": "Consider consulting firms, product and operations teams, financial services, healthcare organizations, and business transformation groups hiring junior analysts.",
+        "data analyst": "Explore junior analyst teams in SaaS, retail, fintech, healthcare, consulting, or small and mid-sized businesses.",
+        "data scientist": "Look at junior analytics teams in technology, fintech, healthcare, retail, and consulting; internships can add applied experience.",
+        "ml engineer": "Explore product teams deploying models, AI/ML startups, and data-platform teams with junior model-serving or pipeline work.",
+        "ai engineer": "Consider AI product teams, SaaS companies adding AI features, application startups, and automation consultancies.",
+        "python developer": "Look at SaaS companies, software consultancies, product startups, and internal automation teams hiring junior developers.",
+        "business analyst": "Explore consulting, product, operations, financial services, healthcare, and business transformation teams hiring junior analysts.",
     }
     portfolio_ideas = {
-        "data analyst": "Recommended: create an end-to-end business analysis from a public dataset: answer a clear business question with SQL, validate and clean the data, build a dashboard, and write a short decision-focused case study.",
-        "data scientist": "Recommended: build a reproducible project with a clear question, baseline model, sound validation, appropriate metrics, and a plain-language explanation of limitations.",
-        "ml engineer": "Recommended: package a small model behind a tested API, document setup, and demonstrate a repeatable training or inference workflow.",
-        "ai engineer": "Recommended: build a small grounded assistant or AI feature with example evaluations, source attribution where appropriate, and documented limitations.",
-        "python developer": "Recommended: publish a small Python service or automation tool with tests, a clear README, sample inputs, and setup instructions.",
-        "business analyst": "Recommended: write a concise process-improvement case study with a process map, measurable KPIs, an analysis, and a stakeholder-ready recommendation.",
+        "data analyst": "Build an end-to-end analysis from a public dataset: answer a business question with SQL, clean the data, create a dashboard, and summarize the decision it supports.",
+        "data scientist": "Build a reproducible project with a clear question, baseline model, sound validation, useful metrics, and a plain-language note on limitations.",
+        "ml engineer": "Package a small model behind a tested API, document setup, and show a repeatable training or inference workflow.",
+        "ai engineer": "Build a small grounded assistant or AI feature, then document its evaluation examples, sources, and limitations.",
+        "python developer": "Publish a small Python service or automation tool with tests, sample inputs, and a clear README.",
+        "business analyst": "Write a process-improvement case study with a process map, measurable KPIs, analysis, and a stakeholder-ready conclusion.",
     }
     interview_prep = {
-        "data analyst": "Recommended: practice SQL joins, grouping and window functions; explain chart choices, data quality checks, and how an analysis changes a business decision.",
-        "data scientist": "Recommended: rehearse statistics and experimentation fundamentals, model-selection trade-offs, metric interpretation, and communicating uncertainty.",
-        "ml engineer": "Recommended: practice Python coding, model-serving design, testing, data/model failure cases, and deployment trade-offs.",
-        "ai engineer": "Recommended: explain a small AI system end to end, including retrieval or grounding, evaluation, privacy/safety limits, latency, and failure handling.",
-        "python developer": "Recommended: practice Python problem solving, API and database fundamentals, debugging, tests, and explaining design choices.",
-        "business analyst": "Recommended: rehearse requirements discovery, process analysis, KPI selection, prioritization, and concise stakeholder communication.",
+        "data analyst": "Practice SQL joins, grouping, and window functions. Be ready to explain chart choices, data checks, and the business decision your analysis supports.",
+        "data scientist": "Review statistics and experimentation, model trade-offs, metric interpretation, and how you communicate uncertainty.",
+        "ml engineer": "Practice Python coding, model serving, testing, common failure cases, and deployment trade-offs.",
+        "ai engineer": "Explain an AI system end to end: grounding, evaluation, privacy limits, latency, and failure handling.",
+        "python developer": "Practice Python problem solving, APIs, databases, debugging, tests, and explaining design choices.",
+        "business analyst": "Rehearse requirements discovery, process analysis, KPI selection, prioritization, and stakeholder communication.",
     }
     category_skills = {
         "Technology": ["role-specific tools", "testing and quality", "Git and practical project work"],
@@ -546,34 +584,60 @@ def _career_preparation(profile, target_role, gaps):
         for item in existing_projects if isinstance(item, dict)
     ]
     project_names = [name for name in project_names if name]
-    portfolio = [portfolio_ideas[role_key] if role_key else f"Recommended: build a small {target_role} case study that shows the problem, your approach, the tools you used, and a clear result."]
+    portfolio = [f"**Portfolio project:** {portfolio_ideas[role_key] if role_key else f'Build a small {target_role} case study that shows the problem, your approach, tools, and result.'}"]
     if project_names:
-        portfolio.append(f"Recommended: polish an existing resume project, such as {project_names[0]}, with a concise problem statement, your contribution, evidence of results, and a recruiter-friendly README or case study.")
+        portfolio.append(f"**Build on your experience:** Polish {project_names[0]} with a clear problem statement, your contribution, evidence of results, and a recruiter-friendly README or case study.")
 
     strengths = _as_items(_find_value(profile, ("technical_skills", "skills", "hard_skills")), ("technical_skills", "skills", "items"))
     strength_names = [_plain_text(skill) for skill in strengths if _plain_text(skill)]
-    skill_advice = [f"Recommended: prioritize {', '.join(priority[:4])} based on the identified gaps or common entry-level requirements for {target_role}."]
+    skill_advice = [f"**Start with {', '.join(priority[:4])}.** These are the main gaps to address for {target_role}."]
     if strength_names:
-        skill_advice.append(f"Recommended: use existing strengths ({', '.join(strength_names[:4])}) as the foundation for practice projects and interview examples.")
+        skill_advice.append(f"**Build on your strengths:** Use {', '.join(strength_names[:4])} in projects and interview examples.")
 
-    generic_company = f"Recommended: explore junior or associate roles in {category.lower()} teams, and compare job descriptions to confirm the tools and experience each employer expects." if category else "Recommended: explore junior roles that match your target title and compare job descriptions to confirm the skills employers expect."
-    generic_interview = "Recommended: practice explaining one project, the choices you made, and what you would improve next; connect each example to the role's requirements."
+    generic_company = f"Explore junior or associate roles in {category.lower()} teams. Compare postings to see which tools and experience employers expect." if category else "Explore junior roles matching your target title and compare postings to see which skills employers expect."
+    generic_interview = "Explain one project: the problem, your approach, the result, and what you would improve next. Connect the example to the role."
     return [
-        ("Job-search timeline", ["Recommended: use a focused 4–8 week preparation sprint, then begin applying once your resume is tailored and one project is ready to show; continue learning while you apply. Adjust the pace to your schedule. This is a suggested plan, not a statement about graduation or availability."]),
-        ("Company types to explore", [f"Recommended: {company_types[role_key]}" if role_key else generic_company]),
+        ("Job-search timeline", ["Use a focused 4–8 week preparation sprint. Start applying when your resume is tailored and you have one project to show; keep learning while you apply. Adjust the pace to your schedule." ]),
+        ("Company types to explore", [company_types[role_key] if role_key else generic_company]),
         ("Skills to prioritize", skill_advice),
         ("Portfolio projects", portfolio),
-        ("Interview preparation", [f"Recommended: {interview_prep[role_key]}" if role_key else generic_interview, "Recommended: prepare two concise STAR examples that connect your own project or work evidence to a problem, your actions, and the result."]),
-        ("LinkedIn and GitHub", ["Recommended: align your headline and About section with the target role, add measurable project outcomes, and make contact details easy to find.", "Recommended: pin two or three polished projects with a README, setup steps, screenshots or outputs, and a short explanation of decisions and results. Remove credentials and API keys from files before publishing."]),
+        ("Interview preparation", [f"**Role practice:** {interview_prep[role_key] if role_key else generic_interview}", "**STAR examples:** Prepare two short stories about a problem, your actions, and the result, using only your real project or work experience."]),
+        ("LinkedIn and GitHub", ["**LinkedIn:** Align your headline and About section with your target role, and highlight measurable project outcomes.", "**GitHub:** Pin two or three polished projects with a clear README, setup steps, and results. Remove credentials and API keys before publishing."]),
     ]
 
 
 def _render_career_preparation(profile, target_role, gaps):
     st.header("8. Recommended Career Preparation", icon=":material/checklist:")
     st.caption("A few practical ideas based on your resume, target role, and current skill gaps. Adapt the timing and priorities to fit your plans.")
+    seen = set()
     for title, recommendations in _career_preparation(profile, target_role, gaps):
         st.subheader(title)
-        _render_bullets(recommendations)
+        cleaned = _unique_advice(recommendations)
+        fresh = []
+        for item in cleaned:
+            key = re.sub(r"[^a-z0-9]+", "", re.sub(r"[\[\]]", "", item.casefold()))
+            if key not in seen:
+                seen.add(key)
+                fresh.append(item)
+        _render_bullets(fresh)
+
+
+def _clean_roadmap_text(value):
+    """Keep roadmap Markdown readable while removing repeated labels and lines."""
+    rendered, seen = [], set()
+    for line in _plain_text(value).splitlines():
+        match = re.match(r"^(\s*(?:#{1,6}\s*|[-*•]\s+|\d+[.)]\s+)?)(.*)$", line)
+        prefix, content = match.groups() if match else ("", line)
+        is_heading = prefix.lstrip().startswith("#")
+        content = _clean_advice_text(content) if is_heading else _concise_advice(content)
+        if not content:
+            continue
+        key = re.sub(r"[^a-z0-9]+", "", re.sub(r"[\[\]]", "", content.casefold()))
+        if key in seen:
+            continue
+        seen.add(key)
+        rendered.append(f"{prefix}{content}")
+    return "\n".join(rendered)
 
 
 def _render_roadmap(value):
@@ -589,7 +653,7 @@ def _render_roadmap(value):
         _render_roadmap_records(roadmap)
         return
 
-    text = _plain_text(roadmap)
+    text = _clean_roadmap_text(roadmap)
     if not text:
         st.caption("A learning roadmap will appear after skill gap analysis.")
         return
@@ -600,7 +664,7 @@ def _render_roadmap(value):
     for line in lines:
         clean = line.strip()
         heading_text = clean.lstrip("#* ").strip()
-        is_period_heading = bool(re.match(r"(?i)^(month|week)\s*(\d+|one|two|three|four|five|six|seven|eight|nine|ten)\b", heading_text))
+        is_period_heading = bool(re.match(r"(?i)^(months?|weeks?)\s*(\d+|one|two|three|four|five|six|seven|eight|nine|ten)\b", heading_text))
         is_numbered_step = bool(re.match(r"^\d+[.)]\s+", heading_text)) and any(word in heading_text.lower() for word in ("month", "week", "phase"))
         if is_period_heading or is_numbered_step:
             if current_heading is not None or current_lines:
@@ -638,18 +702,24 @@ def _render_roadmap_records(value):
         value = [value]
     for index, period in enumerate(value, start=1):
         if isinstance(period, dict):
-            heading = _plain_text(_find_value(period, ("month", "week", "period", "phase", "timeline", "title"), fallback=f"Step {index}"))
+            period_label = _clean_advice_text(_find_value(period, ("month", "week", "period", "phase", "timeline", "title"), fallback=f"Step {index}"))
+            skill_focus = _clean_advice_text(_find_value(period, ("skill", "skill_focus", "focus", "topic"), fallback=""))
+            heading = period_label
+            if skill_focus and skill_focus.casefold() not in period_label.casefold():
+                heading = f"{period_label}: {skill_focus}"
             with st.container(border=True):
                 st.subheader(heading)
                 for key, detail in period.items():
-                    if _normal_key(key) in {"month", "week", "period", "phase", "timeline", "title"}:
+                    if _normal_key(key) in {"month", "week", "period", "phase", "timeline", "title", "skill", "skillfocus", "focus", "topic"}:
                         continue
                     label = key.replace("_", " ").capitalize()
-                    details = _as_items(detail, ("items", "topics", "activities"))
+                    details = _unique_advice(_as_items(detail, ("items", "topics", "activities")))
+                    details = [_concise_advice(item) for item in details]
+                    details = [item for item in details if item]
                     st.markdown(f"**{label}**")
                     _render_bullets(details)
         else:
-            text = _plain_text(period)
+            text = _concise_advice(period)
             if text:
                 st.markdown(f"- {text}")
 

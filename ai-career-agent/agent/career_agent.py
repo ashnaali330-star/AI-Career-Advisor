@@ -398,10 +398,10 @@ def _fallback_roadmap(role: str, analysis: dict) -> str:
     first = (high_priority + medium_priority)[:2] or priorities[:1]
     second = [skill for skill in priorities if skill not in first][:2] or first
     return (
-        f"Week 1–2: Build {', '.join(first)} to the requirement level shown in the comparison.\n"
-        f"- Use the role knowledge topics for {role} to complete focused exercises and record evidence of each skill.\n"
-        f"- Deliverable: a short worked example demonstrating the target-level concepts.\n\n"
-        f"Week 3–4: Apply {', '.join(second)} in a role-specific project.\n"
-        f"- Use the project to demonstrate the exact requirements retrieved for {role}, then document your decisions and results.\n"
-        f"- Deliverable: a portfolio-ready project with a concise README and evidence for the identified gaps."
+        f"### Weeks 1–2: {', '.join(first)}\n"
+        f"- Practice the highest-priority skills using exercises that match {role} requirements.\n"
+        f"- **Task:** Complete one focused exercise for each skill and save the result as evidence.\n\n"
+        f"### Weeks 3–4: {', '.join(second)} in a project\n"
+        f"- Apply the next skills in a role-relevant project, building on what you already know.\n"
+        f"- **Task:** Publish a concise case study or README showing your approach, results, and the skills demonstrated."
     )
