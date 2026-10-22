@@ -114,7 +114,7 @@ def _render_profile(profile):
     if not isinstance(candidate, dict):
         candidate = {"professional_title": candidate} if candidate else {}
 
-    st.header("1. Candidate profile", icon=":material/person:")
+    st.header("👤 1. Candidate profile")
     fields = [
         ("Name", ("name", "full_name", "candidate_name")),
         ("Professional title", ("professional_title", "title", "headline", "current_title")),
@@ -130,7 +130,7 @@ def _render_profile(profile):
                 value = _find_value(profile, aliases)
             st.markdown(f"**{label}:** {_plain_text(value) or 'Not specified'}")
 
-    st.header("2. Skills", icon=":material/psychology:")
+    st.header("🧠 2. Skills")
     technical = _as_items(_find_value(profile, ("technical_skills", "skills", "hard_skills")), ("technical_skills", "skills", "items"))
     soft = _as_items(_find_value(profile, ("soft_skills", "interpersonal_skills")), ("soft_skills", "skills", "items"))
     left, right = st.columns(2)
@@ -141,7 +141,7 @@ def _render_profile(profile):
         st.subheader("People and communication skills")
         _render_bullets(soft)
 
-    st.header("3. Experience & projects", icon=":material/work:")
+    st.header("💼 3. Experience & projects")
     st.subheader("Work experience")
     _render_records(
         _find_value(profile, ("work_experience", "experience", "employment_history")),
@@ -155,7 +155,7 @@ def _render_profile(profile):
         field_labels={"description": "Description", "summary": "Summary", "role": "Role", "technologies": "Tools and technologies", "tools": "Tools and technologies", "skills": "Skills used", "outcome": "Outcome", "impact": "Impact"},
     )
 
-    st.header("4. Education & credentials", icon=":material/school:")
+    st.header("🎓 4. Education & credentials")
     st.subheader("Education")
     _render_records(
         _find_value(profile, ("education", "educational_background", "degrees")),
@@ -607,7 +607,7 @@ def _career_preparation(profile, target_role, gaps):
 
 
 def _render_career_preparation(profile, target_role, gaps):
-    st.header("8. Recommended Career Preparation", icon=":material/checklist:")
+    st.header("✅ 8. Recommended Career Preparation")
     st.caption("A few practical ideas based on your resume, target role, and current skill gaps. Adapt the timing and priorities to fit your plans.")
     seen = set()
     for title, recommendations in _career_preparation(profile, target_role, gaps):
@@ -835,7 +835,7 @@ if profile:
     st.info(summary)
     _render_profile(profile)
 
-    st.header("5. Target career", icon=":material/flag:")
+    st.header("🎯 5. Target career")
     st.markdown(f"Selected role: **{target_role}**")
     if st.button("Run skill gap analysis", disabled=agent is None):
         st.session_state.target_analysis = None
@@ -870,7 +870,7 @@ if profile:
         result = None
         st.info("The selected role changed. Run skill gap analysis to refresh these results.")
     if result:
-        st.header("6. Skill gap analysis", icon=":material/compare_arrows:")
+        st.header("🔎 6. Skill gap analysis")
         if result.get("fallback_used"):
             st.warning(result.get("fallback_message") or "Gemini was unavailable; a local skills comparison and roadmap are shown.")
         _render_skill_gaps(result, target_role)
@@ -880,7 +880,7 @@ if profile:
 
     _render_career_flow(target_role, bool(result))
 
-    st.header("7. Career recommendations", icon=":material/trending_up:")
+    st.header("📈 7. Career recommendations")
     if st.button("Recommend suitable roles", disabled=agent is None):
         try:
             with st.spinner("Matching your profile with role knowledge…"):
@@ -892,13 +892,13 @@ if profile:
     gap_evidence = _find_value(result, ("gaps", "skill_gaps", "skills"), fallback=[]) if result else []
     _render_career_preparation(profile, target_role, gap_evidence)
 
-    st.header("9. Personalized learning roadmap", icon=":material/calendar_month:")
+    st.header("📅 9. Personalized learning roadmap")
     if result:
         _render_roadmap(_find_value(result, ("roadmap", "learning_roadmap", "learning_plan"), fallback=""))
     else:
         st.caption("Run skill gap analysis to generate a personalized roadmap.")
 
-    st.header("10. AI career chat", icon=":material/chat:")
+    st.header("💬 10. AI career chat")
     st.caption("Type a question or choose the microphone. You can edit any transcript before sending.")
     voice_state = st.session_state.get("career_chat_voice", {})
     current_voice_settings = voice_settings(voice_state)
