@@ -114,9 +114,7 @@ The first RAG request downloads/loads the embedding model and builds the local r
 - **Document processing:** `resume/parser.py` extracts text from supported resume file formats.
 - **Frontend:** `app.py` uses Streamlit widgets, tabs, progress states, tables, and chat.
 
-## Limitations and future improvements
 
-Scanned PDFs need OCR, which is not included. Role documents provide a starter knowledge base and should be reviewed and extended for a specific labor market. Local embeddings can require substantial initial download and memory. Future improvements could add OCR, user feedback/evaluations, source citations on individual gap claims, secure multi-user storage, native provider tool calling, and deployment monitoring.
 
 ## Demo questions and answers
 
